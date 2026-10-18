@@ -22,12 +22,21 @@ plt.title("Elbow Method")
 plt.show()
 
 km = KMeans(n_clusters=3, random_state=42, n_init=10)
+# This line groups each data point into a cluster 
+# and stores its cluster label in a new column called Cluster.
 data['Cluster'] = km.fit_predict(X)
 
 print(data['Cluster'].value_counts().sort_index())
 print(data.groupby('Cluster')[features].mean().round(2))
-print("Silhouette Score:", round(silhouette_score(X, data['Cluster']), 3))
 
+print("Silhouette Score:", round(silhouette_score(X, data['Cluster']), 3))
+# The silhouette score ranges from \(-1\) to \(+1\):
+# - Near \(+1\): observations are generally well matched to their own cluster and separated from others.
+# - Near \(0\): clusters overlap or observations lie near cluster boundaries.
+# - Below \(0\): some observations may be closer to another cluster than to their assigned cluster.
+
+# X[:, 0] selects the standardized SALES feature.
+# X[:, 2] selects the standardized PRICEEACH feature.
 sns.scatterplot(x=X[:, 0], y=X[:, 2], hue=data['Cluster'], palette='Set1')
 plt.xlabel("Standardized Sales")
 plt.ylabel("Standardized Price Each")

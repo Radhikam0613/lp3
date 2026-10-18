@@ -40,14 +40,10 @@ plt.show()
 Q1, Q3 = df.fare_amount.quantile([0.25, 0.75])
 IQR = Q3 - Q1
 lower, upper = max(0, Q1 - 1.5*IQR), Q3 + 1.5*IQR
-
 print("Number of outliers:", ((df.fare_amount < lower) | (df.fare_amount > upper)).sum())
-print("Bounds:", lower, upper)
-
 df = df[df.fare_amount.between(lower, upper)].copy()
 
 features = ['fare_amount', 'pickup_longitude', 'pickup_latitude','dropoff_longitude', 'dropoff_latitude', 'passenger_count','distance_km', 'hour', 'day', 'month', 'year', 'day_of_week']
-
 corr = df[features].corr()
 sns.heatmap(corr, annot=True, cmap='coolwarm', fmt='.2f')
 plt.title("Correlation Heatmap")
@@ -55,20 +51,15 @@ plt.show()
 
 X = df[features[1:]]
 y = df['fare_amount']
-
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 models = {'Linear Regression': LinearRegression(), 
-          'Random Forest': RandomForestRegressor(
-                            n_estimators=100, 
-                            random_state=42, 
-                            n_jobs=-1)}
+        'Random Forest': RandomForestRegressor(n_estimators=100,random_state=42,n_jobs=-1)}
 
-results, predictions = [], {}
+results = []
 for name, model in models.items():
     model.fit(X_train, y_train)
     pred = model.predict(X_test)
-    predictions[name] = pred
     results.append({
         'Model': name,
         'R2': r2_score(y_test, pred),

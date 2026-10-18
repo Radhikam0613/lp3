@@ -1,8 +1,8 @@
 def fractional_knapsack(values, weights, capacity): #tc = O(n log n), sc = O(n)
       items = sorted(  
             range(len(values)),
-            key=lambda i: values[i] / weights[i],
-            reverse=True)
+            key = lambda i : values[i] / weights[i],
+            reverse = True)
       total = 0
       print("\nItem\tValue\tWeight\tRatio\tFraction Taken")
       for i in items:

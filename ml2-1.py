@@ -16,8 +16,11 @@ X = StandardScaler().fit_transform(data)
 
 print("Shape:", X.shape)
 
+# method='ward' minimizes the increase in within-cluster variance at each merge.
 Z = linkage(X, method='ward')
 plt.figure(figsize=(10, 5))
+#truncate_mode='lastp', p=20 shows a simplified dendrogram with the 
+# last 20 merged groups, making it easier to read for a dataset containing many rows.
 dendrogram(Z, truncate_mode='lastp', p=20)
 plt.title("Hierarchical Clustering Dendrogram")
 plt.xlabel("Clusters")
@@ -25,6 +28,7 @@ plt.ylabel("Distance")
 plt.show()
 
 hc = AgglomerativeClustering(n_clusters=3, linkage='ward')
+# fit_predict(X) trains the model and returns a cluster label for each observation.
 data['Cluster'] = hc.fit_predict(X)
 
 print(data['Cluster'].value_counts().sort_index())

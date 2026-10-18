@@ -10,7 +10,7 @@ def knapsack(values, weights, capacity):# tc = O(n * capacity), sc = O(n * capac
                         )
                   else:
                         dp[i][w] = dp[i - 1][w]
-      selected, w= [], capacity
+      selected, w = [], capacity
       for i in range(n, 0, -1):
             if dp[i][w] != dp[i - 1][w]:
                   selected.append(i - 1)
