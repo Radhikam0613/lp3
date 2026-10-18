@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import AgglomerativeClustering
-from sklearn.metrics import silhouette_score,  davies_bouldin_score, calinski_harabasz_score
+from sklearn.metrics import silhouette_score
 from scipy.cluster.hierarchy import linkage, dendrogram
 from google.colab import files
 
@@ -30,5 +30,3 @@ data['Cluster'] = hc.fit_predict(X)
 print(data['Cluster'].value_counts().sort_index())
 print(data.groupby('Cluster')[features].mean().round(2))
 print("Silhouette Score:", round(silhouette_score(X, data['Cluster']), 3))
-print("Davies-Bouldin Index:", round(davies_bouldin_score(X, data['Cluster']), 3))
-print("Calinski-Harabasz Score:", round(calinski_harabasz_score(X, data['Cluster']), 3))

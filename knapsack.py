@@ -12,16 +12,16 @@ def fractional_knapsack(values, weights, capacity): #tc = O(n log n), sc = O(n)
             fraction = take / weights[i]
             total += fraction * values[i]
             capacity -= take
-      print(i + 1, "\t", values[i], "\t", weights[i],"\t", round(values[i] / weights[i], 2),"\t", round(fraction, 4))
-      return total
+            print(i + 1, "\t", values[i], "\t", weights[i],"\t", round(values[i] / weights[i], 2),"\t", round(fraction, 4))
+      print ("Maximum value obtained", total)
 n = int(input("Enter number of items: "))
-values = []
-weights = []
+values, weights = [], []
 for i in range(n):
-      values.append(float(input("Enter value of item " + str(i + 1) + ": ")))
-      weights.append(float(input("Enter weight of item " + str(i + 1) + ": ")))
-capacity = float(input("Enter knapsack capacity: "))
-print("Maximum value obtained:", fractional_knapsack(values, weights, capacity))
+      print("\nItem", i + 1)
+      values.append(float(input("Enter value: ")))
+      weights.append(float(input("Enter weight: ")))
+capacity = float(input("\nEnter knapsack capacity: "))
+fractional_knapsack(values, weights, capacity)
 
 
 

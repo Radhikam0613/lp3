@@ -4,11 +4,14 @@ board[0] = 0
 
 def print_board():
     for r in range(N):
+        # so where b[r] is any value of c and not -1 we print Q
         print(" ".join("Q" if board[r] == c else "." for c in range(N)))
     print()
 
 def safe(row, col):
     for r in range(row):
+        # Two queens are on the same diagonal when the absolute difference 
+        # between their columns equals the absolute difference between their rows.
         if board[r] == col or abs(board[r] - col) == abs(r - row):
             return False
     return True
@@ -17,7 +20,6 @@ def solve(row):
     if row == N: return True
     for col in range(N):
         if safe(row, col):
-            # Place the queen and move to the next row
             board[row] = col
             if solve(row + 1):
                 return True
@@ -43,6 +45,8 @@ else:print("No solution found")
 # def safe(row, col):
 #     for r in range(row):
 #         # Check if the column is already occupied or if the queens are on the same diagonal
+#         # Two queens are on the same diagonal when the absolute difference between their 
+#           columns equals the absolute difference between their rows.
 #         # abs(board[r] - col) == abs(r - row) calculates the diagonal conflict 
 #         # by comparing the difference in rows and columns
 #         if board[r] == col or abs(board[r] - col) == abs(r - row):

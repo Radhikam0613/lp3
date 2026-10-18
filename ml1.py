@@ -19,15 +19,15 @@ df = df[(df.fare_amount > 0) & df.passenger_count.between(1, 6) &
 for col, value in {
     'hour': df.pickup_datetime.dt.hour,
     'day': df.pickup_datetime.dt.day,
+    'day_of_week': df.pickup_datetime.dt.dayofweek,
     'month': df.pickup_datetime.dt.month,
-    'year': df.pickup_datetime.dt.year,
-    'day_of_week': df.pickup_datetime.dt.dayofweek
+    'year': df.pickup_datetime.dt.year
 }.items():
     df[col] = value
 
-def haversine(lat1, lon1, lat2, lon2):
-    lat1, lon1, lat2, lon2 = map(np.radians, [lat1, lon1, lat2, lon2])
-    a = np.sin((lat2-lat1)/2)**2 + np.cos(lat1)*np.cos(lat2)*np.sin((lon2-lon1)/2)**2
+def haversine(pickuplat, pickuplon, dropofflat, dropofflon):
+    pickuplat, pickuplon, dropofflat, dropofflon = map(np.radians, [pickuplat, pickuplon, dropofflat, dropofflon])
+    a = np.sin((dropofflat-pickuplat)/2)**2 + np.cos(pickuplat)*np.cos(dropofflat)*np.sin((dropofflon-pickuplon)/2)**2
     return 6371 * 2 * np.arcsin(np.sqrt(np.clip(a, 0, 1)))
 
 df['distance_km'] = haversine(df.pickup_latitude, df.pickup_longitude,df.dropoff_latitude, df.dropoff_longitude)
@@ -59,10 +59,12 @@ y = df['fare_amount']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 models = {'Linear Regression': LinearRegression(), 
-          'Random Forest': RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)}
+          'Random Forest': RandomForestRegressor(
+                            n_estimators=100, 
+                            random_state=42, 
+                            n_jobs=-1)}
 
 results, predictions = [], {}
-
 for name, model in models.items():
     model.fit(X_train, y_train)
     pred = model.predict(X_test)
@@ -73,12 +75,4 @@ for name, model in models.items():
         'MAE': mean_absolute_error(y_test, pred),
         'RMSE': np.sqrt(mean_squared_error(y_test, pred))
     })
-
 print(pd.DataFrame(results).round(3).to_string(index=False))
-
-plt.figure(figsize=(6, 4))
-plt.scatter(y_test, predictions['Random Forest'], alpha=0.3)
-plt.xlabel("Actual Fare")
-plt.ylabel("Predicted Fare")
-plt.title("Random Forest: Actual vs Predicted Fare")
-plt.show()
